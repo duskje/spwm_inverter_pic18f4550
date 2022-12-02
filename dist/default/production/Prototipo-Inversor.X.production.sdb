@@ -1,0 +1,454 @@
+[p GLOBOPT AUTOSTATIC IEEE_FLT IEEE_DBL LFSROK EMI_WORD ]
+[d version 1.1 ]
+[d edition pro ]
+[d chip 18F4550 ]
+[d frameptr 4065 ]
+"59 C:\Users\duskje\MPLABXProjects\Prototipo-Inversor.X\serial_communication.c
+[e E3204 result `uc
+ERROR 0
+SUCCESS 1
+TIMEOUT 2
+]
+"113
+[e E3209 msg_type `uc
+CONN 1
+ACK 2
+NACK 3
+SYNCHRO 4
+ALIVE 5
+FETCH 6
+READY 7
+EXIT 8
+]
+"4 C:\Program Files\Microchip\xc8\v2.40\pic\sources\c99\common\fleq.c
+[v ___fleq __fleq `(b  1 e 0 0 ]
+"4 C:\Program Files\Microchip\xc8\v2.40\pic\sources\c99\common\flge.c
+[v ___flge __flge `(b  1 e 0 0 ]
+"62 C:\Program Files\Microchip\xc8\v2.40\pic\sources\c99\common\float.c
+[v ___ftpack __ftpack `(f  1 e 4 0 ]
+"43 C:\Program Files\Microchip\xc8\v2.40\pic\sources\c99\common\fltol.c
+[v ___fltol __fltol `(l  1 e 4 0 ]
+"86 C:\Program Files\Microchip\xc8\v2.40\pic\sources\c99\common\ftadd.c
+[v ___ftadd __ftadd `(f  1 e 4 0 ]
+"54 C:\Program Files\Microchip\xc8\v2.40\pic\sources\c99\common\ftdiv.c
+[v ___ftdiv __ftdiv `(f  1 e 4 0 ]
+"62 C:\Program Files\Microchip\xc8\v2.40\pic\sources\c99\common\ftmul.c
+[v ___ftmul __ftmul `(f  1 e 4 0 ]
+"19 C:\Program Files\Microchip\xc8\v2.40\pic\sources\c99\common\ftsub.c
+[v ___ftsub __ftsub `(f  1 e 4 0 ]
+"10 C:\Program Files\Microchip\xc8\v2.40\pic\sources\c99\common\sprcadd.c
+[v ___fladd __fladd `(d  1 e 4 0 ]
+"245
+[v ___flsub __flsub `(d  1 e 4 0 ]
+"11 C:\Program Files\Microchip\xc8\v2.40\pic\sources\c99\common\sprcdiv.c
+[v ___fldiv __fldiv `(d  1 e 4 0 ]
+"8 C:\Program Files\Microchip\xc8\v2.40\pic\sources\c99\common\sprcmul.c
+[v ___flmul __flmul `(d  1 e 4 0 ]
+"3 C:\Program Files\Microchip\xc8\v2.40\pic\sources\c99\common\truncf.c
+[v _truncf truncf `(f  1 e 4 0 ]
+"15 C:\Program Files\Microchip\xc8\v2.40\pic\sources\c99\common\Umul32.c
+[v ___lmul __lmul `(ul  1 e 4 0 ]
+"91 C:\Program Files\Microchip\xc8\v2.40\pic\sources\c99\common\Umul64.c
+[v ___omul __omul `(uo  1 e 8 0 ]
+"10 C:\Program Files\Microchip\xc8\v2.40\pic\sources\c99\common\xxtofl.c
+[v ___xxtofl __xxtofl `(d  1 e 4 0 ]
+"22 C:\Users\duskje\MPLABXProjects\Prototipo-Inversor.X\main.c
+[v _setPWMFreq setPWMFreq `(v  1 e 1 0 ]
+"27
+[v _setDutyCycle setDutyCycle `(v  1 e 1 0 ]
+"38
+[v _initPWMMode initPWMMode `(v  1 e 1 0 ]
+"71
+[v _startUpDuty startUpDuty `(v  1 e 1 0 ]
+"78
+[v _main main `(i  1 e 2 0 ]
+"17 C:\Users\duskje\MPLABXProjects\Prototipo-Inversor.X\serial_communication.c
+[v _usart_init usart_init `(v  1 e 1 0 ]
+"59
+[v _usart_receive_byte usart_receive_byte `(E3204  1 e 1 0 ]
+"85
+[v _usart_receive_n_bytes usart_receive_n_bytes `(E3204  1 e 1 0 ]
+"101
+[v _usart_transmit_byte usart_transmit_byte `(v  1 e 1 0 ]
+"107
+[v _usart_transmit_n_bytes usart_transmit_n_bytes `(v  1 e 1 0 ]
+"113
+[v _send_with_data send_with_data `(v  1 e 1 0 ]
+"125
+[v _recv_with_data recv_with_data `(E3204  1 e 1 0 ]
+"154
+[v _send_message send_message `(v  1 e 1 0 ]
+"159
+[v _recv_message recv_message `(E3204  1 e 1 0 ]
+"177
+[v _connect connect `(a  1 e 1 0 ]
+"210
+[v _setCCP1CON_5_4 setCCP1CON_5_4 `(v  1 e 1 0 ]
+"258
+[v _synchronize synchronize `(a  1 e 1 0 ]
+[s S32 . 1 `uc 1 TRISC0 1 0 :1:0 
+`uc 1 TRISC1 1 0 :1:1 
+`uc 1 TRISC2 1 0 :1:2 
+`uc 1 . 1 0 :3:3 
+`uc 1 TRISC6 1 0 :1:6 
+`uc 1 TRISC7 1 0 :1:7 
+]
+"3876 C:/Program Files/Microchip/MPLABX/v6.00/packs/Microchip/PIC18Fxxxx_DFP/1.3.36/xc8\pic\include\proc\pic18f4550.h
+[s S39 . 1 `uc 1 RC0 1 0 :1:0 
+`uc 1 RC1 1 0 :1:1 
+`uc 1 RC2 1 0 :1:2 
+`uc 1 . 1 0 :3:3 
+`uc 1 RC6 1 0 :1:6 
+`uc 1 RC7 1 0 :1:7 
+]
+[u S46 . 1 `S32 1 . 1 0 `S39 1 . 1 0 ]
+[v _TRISCbits TRISCbits `VES46  1 e 1 @3988 ]
+"4937
+[v _RCSTA RCSTA `VEuc  1 e 1 @4011 ]
+"5147
+[v _TXSTA TXSTA `VEuc  1 e 1 @4012 ]
+"5403
+[v _TXREG TXREG `VEuc  1 e 1 @4013 ]
+"5415
+[v _RCREG RCREG `VEuc  1 e 1 @4014 ]
+"5427
+[v _SPBRG SPBRG `VEuc  1 e 1 @4015 ]
+"6063
+[v _BAUDCON BAUDCON `VEuc  1 e 1 @4024 ]
+"6328
+[v _CCP1CON CCP1CON `VEuc  1 e 1 @4029 ]
+"6497
+[v _CCPR1L CCPR1L `VEuc  1 e 1 @4030 ]
+"7201
+[v _T2CON T2CON `VEuc  1 e 1 @4042 ]
+[s S66 . 1 `uc 1 T2CKPS 1 0 :2:0 
+`uc 1 TMR2ON 1 0 :1:2 
+`uc 1 TOUTPS 1 0 :4:3 
+]
+"7229
+[s S70 . 1 `uc 1 T2CKPS0 1 0 :1:0 
+`uc 1 T2CKPS1 1 0 :1:1 
+`uc 1 . 1 0 :1:2 
+`uc 1 T2OUTPS0 1 0 :1:3 
+`uc 1 T2OUTPS1 1 0 :1:4 
+`uc 1 T2OUTPS2 1 0 :1:5 
+`uc 1 T2OUTPS3 1 0 :1:6 
+]
+[s S78 . 1 `uc 1 . 1 0 :3:0 
+`uc 1 TOUTPS0 1 0 :1:3 
+`uc 1 TOUTPS1 1 0 :1:4 
+`uc 1 TOUTPS2 1 0 :1:5 
+`uc 1 TOUTPS3 1 0 :1:6 
+]
+[u S84 . 1 `S66 1 . 1 0 `S70 1 . 1 0 `S78 1 . 1 0 ]
+[v _T2CONbits T2CONbits `VES84  1 e 1 @4042 ]
+"7299
+[v _PR2 PR2 `VEuc  1 e 1 @4043 ]
+"7409
+[v _TMR2 TMR2 `VEuc  1 e 1 @4044 ]
+"9206
+[v _CREN CREN `VEb  1 e 0 @32092 ]
+"10448
+[v _RCIF RCIF `VEb  1 e 0 @31989 ]
+"11048
+[v _TXIF TXIF `VEb  1 e 0 @31988 ]
+"78 C:\Users\duskje\MPLABXProjects\Prototipo-Inversor.X\main.c
+[v _main main `(i  1 e 2 0 ]
+{
+"82
+[v main@F_PWM F_PWM `Cf  1 a 4 31 ]
+"94
+[v main@connected connected `a  1 a 1 36 ]
+"96
+[v main@debug debug `a  1 a 1 35 ]
+"112
+} 0
+"17 C:\Users\duskje\MPLABXProjects\Prototipo-Inversor.X\serial_communication.c
+[v _usart_init usart_init `(v  1 e 1 0 ]
+{
+"32
+[v usart_init@USART_CONFIG_RX USART_CONFIG_RX `VEuc  1 a 1 2 ]
+"21
+[v usart_init@USART_CONFIG_TX USART_CONFIG_TX `VEuc  1 a 1 1 ]
+"44
+[v usart_init@BAUDRATE_CONFIG BAUDRATE_CONFIG `VEuc  1 a 1 0 ]
+"57
+} 0
+"258
+[v _synchronize synchronize `(a  1 e 1 0 ]
+{
+"276
+[v synchronize@i i `ui  1 a 2 65 ]
+"299
+[v synchronize@i_279 i `ui  1 a 2 67 ]
+"262
+[v synchronize@data_buf data_buf `[10]uc  1 a 10 52 ]
+"260
+[v synchronize@recv_msg_type recv_msg_type `E3209  1 a 1 70 ]
+"263
+[v synchronize@result result `E3204  1 a 1 69 ]
+"259
+[v synchronize@recv_len recv_len `uc  1 a 1 64 ]
+"265
+[v synchronize@fetch_retries fetch_retries `uc  1 a 1 63 ]
+"297
+[v synchronize@msg msg `E3209  1 a 1 62 ]
+"305
+} 0
+"210
+[v _setCCP1CON_5_4 setCCP1CON_5_4 `(v  1 e 1 0 ]
+{
+[v setCCP1CON_5_4@ccpxcon ccpxcon `uc  1 a 1 wreg ]
+[v setCCP1CON_5_4@ccpxcon ccpxcon `uc  1 a 1 wreg ]
+[v setCCP1CON_5_4@ccpxcon ccpxcon `uc  1 a 1 1 ]
+"213
+} 0
+"125
+[v _recv_with_data recv_with_data `(E3204  1 e 1 0 ]
+{
+"131
+[v recv_with_data@result result `E3204  1 a 1 51 ]
+"126
+[v recv_with_data@received_msg_len received_msg_len `*.39uc  1 p 2 43 ]
+"127
+[v recv_with_data@received_msg_type received_msg_type `*.39E3209  1 p 2 45 ]
+"128
+[v recv_with_data@data_buf data_buf `*.39uc  1 p 2 47 ]
+"129
+[v recv_with_data@data_buf_len data_buf_len `uc  1 p 1 49 ]
+"152
+} 0
+"85
+[v _usart_receive_n_bytes usart_receive_n_bytes `(E3204  1 e 1 0 ]
+{
+[v usart_receive_n_bytes@n_bytes n_bytes `uc  1 a 1 wreg ]
+"87
+[v usart_receive_n_bytes@recv_byte recv_byte `uc  1 a 1 42 ]
+"89
+[v usart_receive_n_bytes@result result `E3204  1 a 1 39 ]
+"86
+[v usart_receive_n_bytes@i i `i  1 a 2 40 ]
+"85
+[v usart_receive_n_bytes@n_bytes n_bytes `uc  1 a 1 wreg ]
+[v usart_receive_n_bytes@usart_buffer usart_buffer `*.39uc  1 p 2 32 ]
+[v usart_receive_n_bytes@usart_buf_len usart_buf_len `uc  1 p 1 34 ]
+[v usart_receive_n_bytes@n_bytes n_bytes `uc  1 a 1 38 ]
+"99
+} 0
+"71 C:\Users\duskje\MPLABXProjects\Prototipo-Inversor.X\main.c
+[v _startUpDuty startUpDuty `(v  1 e 1 0 ]
+{
+[v startUpDuty@start_duty start_duty `uc  1 a 1 wreg ]
+"72
+[v startUpDuty@i i `i  1 a 2 29 ]
+"71
+[v startUpDuty@start_duty start_duty `uc  1 a 1 wreg ]
+[v startUpDuty@end_duty end_duty `uc  1 p 1 94 ]
+[v startUpDuty@start_duty start_duty `uc  1 a 1 28 ]
+"76
+} 0
+"27
+[v _setDutyCycle setDutyCycle `(v  1 e 1 0 ]
+{
+[v setDutyCycle@dutyCycle dutyCycle `uc  1 a 1 wreg ]
+"31
+[v setDutyCycle@dutyCycleBits dutyCycleBits `us  1 a 2 22 ]
+"27
+[v setDutyCycle@dutyCycle dutyCycle `uc  1 a 1 wreg ]
+[v setDutyCycle@dutyCycle dutyCycle `uc  1 a 1 24 ]
+"36
+} 0
+"22
+[v _setPWMFreq setPWMFreq `(v  1 e 1 0 ]
+{
+[v setPWMFreq@PWMFreq PWMFreq `f  1 p 4 16 ]
+"25
+} 0
+"3 C:\Program Files\Microchip\xc8\v2.40\pic\sources\c99\common\truncf.c
+[v _truncf truncf `(f  1 e 4 0 ]
+{
+[u S717 . 4 `f 1 f 4 0 `ul 1 i 4 0 ]
+"5
+[v truncf@u u `S717  1 a 4 6 ]
+"7
+[v truncf@m m `ul  1 a 4 0 ]
+"6
+[v truncf@e e `i  1 a 2 4 ]
+"3
+[v truncf@x x `f  1 p 4 80 ]
+"4
+[v truncf@F526 F526 `S717  1 s 4 F526 ]
+"19
+} 0
+"43 C:\Program Files\Microchip\xc8\v2.40\pic\sources\c99\common\fltol.c
+[v ___fltol __fltol `(l  1 e 4 0 ]
+{
+"45
+[v ___fltol@exp1 exp1 `uc  1 a 1 15 ]
+[v ___fltol@sign1 sign1 `uc  1 a 1 14 ]
+"43
+[v ___fltol@f1 f1 `d  1 p 4 90 ]
+"70
+} 0
+"8 C:\Program Files\Microchip\xc8\v2.40\pic\sources\c99\common\sprcmul.c
+[v ___flmul __flmul `(d  1 e 4 0 ]
+{
+[s S582 . 4 `uc 1 a 1 0 `uc 1 b 1 1 `uc 1 c 1 2 `uc 1 d 1 3 ]
+"13
+[s S587 . 4 `s 1 wordA 2 0 `s 1 wordB 2 2 ]
+[u S590 . 4 `l 1 i 4 0 `d 1 f 4 0 `S582 1 fAsBytes 4 0 `S587 1 fAsWords 4 0 ]
+[v ___flmul@prod prod `S590  1 a 4 58 ]
+"12
+[v ___flmul@grs grs `ul  1 a 4 52 ]
+[s S658 . 2 `uc 1 a 1 0 `uc 1 b 1 1 ]
+"14
+[u S661 . 2 `s 1 i 2 0 `us 1 n 2 0 `S658 1 nAsBytes 2 0 ]
+[v ___flmul@temp temp `S661  1 a 2 62 ]
+"10
+[v ___flmul@bexp bexp `uc  1 a 1 57 ]
+"11
+[v ___flmul@aexp aexp `uc  1 a 1 56 ]
+"9
+[v ___flmul@sign sign `uc  1 a 1 51 ]
+"8
+[v ___flmul@b b `d  1 p 4 39 ]
+[v ___flmul@a a `d  1 p 4 43 ]
+"205
+} 0
+"11 C:\Program Files\Microchip\xc8\v2.40\pic\sources\c99\common\sprcdiv.c
+[v ___fldiv __fldiv `(d  1 e 4 0 ]
+{
+"21
+[v ___fldiv@grs grs `ul  1 a 4 33 ]
+"22
+[v ___fldiv@rem rem `ul  1 a 4 26 ]
+"20
+[v ___fldiv@new_exp new_exp `s  1 a 2 31 ]
+"19
+[v ___fldiv@aexp aexp `uc  1 a 1 38 ]
+"18
+[v ___fldiv@bexp bexp `uc  1 a 1 37 ]
+"16
+[v ___fldiv@sign sign `uc  1 a 1 30 ]
+"11
+[v ___fldiv@b b `d  1 p 4 14 ]
+[v ___fldiv@a a `d  1 p 4 18 ]
+"185
+} 0
+"10 C:\Program Files\Microchip\xc8\v2.40\pic\sources\c99\common\sprcadd.c
+[v ___fladd __fladd `(d  1 e 4 0 ]
+{
+"17
+[v ___fladd@grs grs `uc  1 a 1 79 ]
+"15
+[v ___fladd@bexp bexp `uc  1 a 1 78 ]
+"16
+[v ___fladd@aexp aexp `uc  1 a 1 77 ]
+"13
+[v ___fladd@signs signs `uc  1 a 1 76 ]
+"10
+[v ___fladd@b b `d  1 p 4 64 ]
+[v ___fladd@a a `d  1 p 4 68 ]
+"237
+} 0
+"38 C:\Users\duskje\MPLABXProjects\Prototipo-Inversor.X\main.c
+[v _initPWMMode initPWMMode `(v  1 e 1 0 ]
+{
+"46
+} 0
+"177 C:\Users\duskje\MPLABXProjects\Prototipo-Inversor.X\serial_communication.c
+[v _connect connect `(a  1 e 1 0 ]
+{
+"191
+[v connect@data_buf data_buf `[3]uc  1 a 3 37 ]
+"179
+[v connect@recv_msg_type recv_msg_type `E3209  1 a 1 41 ]
+"178
+[v connect@recv_len recv_len `uc  1 a 1 40 ]
+"208
+} 0
+"113
+[v _send_with_data send_with_data `(v  1 e 1 0 ]
+{
+"114
+[v send_with_data@msg_len msg_len `uc  1 a 1 wreg ]
+[v send_with_data@msg_len msg_len `uc  1 a 1 wreg ]
+"115
+[v send_with_data@msg_type msg_type `E3209  1 p 1 9 ]
+"116
+[v send_with_data@data_buf data_buf `*.39uc  1 p 2 10 ]
+"117
+[v send_with_data@data_buf_len data_buf_len `uc  1 p 1 12 ]
+"119
+[v send_with_data@msg_len msg_len `uc  1 a 1 13 ]
+"123
+} 0
+"107
+[v _usart_transmit_n_bytes usart_transmit_n_bytes `(v  1 e 1 0 ]
+{
+[v usart_transmit_n_bytes@n_bytes n_bytes `uc  1 a 1 wreg ]
+"108
+[v usart_transmit_n_bytes@i i `i  1 a 2 7 ]
+"107
+[v usart_transmit_n_bytes@n_bytes n_bytes `uc  1 a 1 wreg ]
+[v usart_transmit_n_bytes@usart_buffer usart_buffer `*.39uc  1 p 2 1 ]
+[v usart_transmit_n_bytes@n_bytes n_bytes `uc  1 a 1 6 ]
+"111
+} 0
+"154
+[v _send_message send_message `(v  1 e 1 0 ]
+{
+[v send_message@msg_type msg_type `E3209  1 a 1 wreg ]
+[v send_message@msg_type msg_type `E3209  1 a 1 wreg ]
+[v send_message@msg_type msg_type `E3209  1 a 1 1 ]
+"157
+} 0
+"101
+[v _usart_transmit_byte usart_transmit_byte `(v  1 e 1 0 ]
+{
+[v usart_transmit_byte@byte byte `uc  1 a 1 wreg ]
+[v usart_transmit_byte@byte byte `uc  1 a 1 wreg ]
+[v usart_transmit_byte@byte byte `uc  1 a 1 0 ]
+"105
+} 0
+"159
+[v _recv_message recv_message `(E3204  1 e 1 0 ]
+{
+"160
+[v recv_message@result result `E3204  1 a 1 36 ]
+"159
+[v recv_message@received_msg_len received_msg_len `*.39uc  1 p 2 32 ]
+[v recv_message@received_msg_type received_msg_type `*.39E3209  1 p 2 34 ]
+"175
+} 0
+"59
+[v _usart_receive_byte usart_receive_byte `(E3204  1 e 1 0 ]
+{
+"60
+[v usart_receive_byte@timeout timeout `ul  1 a 4 28 ]
+"59
+[v usart_receive_byte@recv_byte recv_byte `*.39uc  1 p 2 26 ]
+"83
+} 0
+"10 C:\Program Files\Microchip\xc8\v2.40\pic\sources\c99\common\xxtofl.c
+[v ___xxtofl __xxtofl `(d  1 e 4 0 ]
+{
+[v ___xxtofl@sign sign `uc  1 a 1 wreg ]
+"13
+[v ___xxtofl@arg arg `ul  1 a 4 10 ]
+"12
+[v ___xxtofl@exp exp `uc  1 a 1 9 ]
+"10
+[v ___xxtofl@sign sign `uc  1 a 1 wreg ]
+[v ___xxtofl@val val `l  1 p 4 0 ]
+"15
+[v ___xxtofl@sign sign `uc  1 a 1 8 ]
+"44
+} 0
+"4 C:\Program Files\Microchip\xc8\v2.40\pic\sources\c99\common\flge.c
+[v ___flge __flge `(b  1 e 0 0 ]
+{
+[v ___flge@ff1 ff1 `d  1 p 4 14 ]
+[v ___flge@ff2 ff2 `d  1 p 4 18 ]
+"19
+} 0
