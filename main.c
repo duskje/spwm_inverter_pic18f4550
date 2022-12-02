@@ -17,11 +17,11 @@
 
 #define _XTAL_FREQ 20e6
 
-const uint32_t F_OSC = 48e6;
-
 void setPWMFreq(float PWMFreq) {
-    const uint8_t TMR2Prescaler = 16;
-    PR2 = trunc(((float) F_OSC / (PWMFreq * 4 * (TMR2Prescaler))) - 1);
+    const uint8_t TMR2Prescaler = 1;
+    const uint32_t F_OSC = 32e6;
+    
+    PR2 = ceil(((float) F_OSC / (PWMFreq * 4 * (TMR2Prescaler))) - 1);
 }
 
 void setDutyCycle(uint8_t dutyCycle) {
@@ -40,6 +40,16 @@ void initPWMMode(void) {
     PR2 = 35;
     CCPR1L = 0; // Duty cycle inicialziado a cero
     T2CON = 0b10; // Prescaler a 16
+    CCP1CON = 0x0c; // Modo PWM
+    TMR2 = 0;
+    T2CONbits.TMR2ON = 1;
+}
+
+void initSPWM(void){
+    TRISCbits.TRISC2 = 0;
+    PR2 = 224;
+    CCPR1L = 0; // Duty cycle inicialziado a cero
+    T2CON = 0b00; // Prescaler a 1
     CCP1CON = 0x0c; // Modo PWM
     TMR2 = 0;
     T2CONbits.TMR2ON = 1;
@@ -77,24 +87,20 @@ void startUpDuty(uint8_t start_duty, uint8_t end_duty) {
 
 int main(void) {
     // (48e6 / 9600 / 64) - 1 = 77.125
-    initPWMMode();
-
-    const float F_PWM = 20e3; // Frecuencia de conmutación requerida
-
+    //initPWMMode();
+    
+    initSPWM();
+    const float F_PWM = 40e3; // Frecuencia de conmutación requerida
     setPWMFreq(F_PWM);
-    // setDutyCycle(50);
     startUpDuty(0, 50);
-
-    // PR2 = 36; // Frecuencia de operacion a 20khz
-    // CCP1CON = 7;
-    // CCPR1L = 1;
-
+    
     usart_init();
 
     bool connected = false;
-
     bool debug = false;
 
+    while(true);
+    /*
     while (true) {
         if (!connected) {
             connected = connect();
@@ -107,6 +113,7 @@ int main(void) {
             debug = true;
         }
     }
+    */
 
     return 0;
 }
