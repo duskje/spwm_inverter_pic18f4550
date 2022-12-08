@@ -71,16 +71,26 @@
 extern "C" {
 #endif /* __cplusplus */
 
-enum communication_state {
-   DISCONNECTED = 0,
-   CONNECTED = 1
-};
+typedef enum communication_state {
+   CONNECT = 0,
+   DISCONNECT = 1,
+   SEND_DATA = 2,
+   RECV_DATA = 3
+} communication_state_t;
 
 typedef enum result {
    ERROR = 0,
    SUCCESS = 1,
    TIMEOUT = 2,
+   NOT_READY = 3
 } result_t;
+
+typedef enum message_queue_result {
+    MESSAGE_QUEUE_SUCCESS = 0,
+    MESSAGE_QUEUE_FULL = 1,
+    MESSAGE_QUEUE_EMPTY =2
+} message_queue_result_t;
+
 
 typedef enum msg_type {
    CONN = 1,
