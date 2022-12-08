@@ -11,6 +11,9 @@
 #include "bitconfig.h"
 #include "serial_communication.h"
 
+#include "spwm_tables.h"
+#include "usart.h"
+
 #include <stdint.h>
 #include <stdbool.h>
 #include <math.h>
@@ -46,60 +49,108 @@ void initPWMMode(void) {
 }
 
 void initSPWM(void){
-    TRISCbits.TRISC2 = 0;
-    PR2 = 224;
-    CCPR1L = 0; // Duty cycle inicialziado a cero
+    TRISCbits.TRISC2 = 0; // Pin C2 como salida
+    TRISDbits.TRISD5 = 0; // Pin D5 como salida
+    
     T2CON = 0b00; // Prescaler a 1
-    CCP1CON = 0x0c; // Modo PWM
+    
+    PR2 = 199;
+    CCPR1L = 0; // Duty cycle inicialziado a cero
+
+    // Modo PWM
+    CCP1CON = 0x0c;
+    //CCP1CON = 0b1101;
+    CCP1CON |= 0b10 << 6; // Modo Half-Bridge
+    ECCP1DEL = 0b111; // Tiempo muerto
+    //CCP2CON = 0x0c;
+    
     TMR2 = 0;
     T2CONbits.TMR2ON = 1;
 }
 
-void process(void) {
-    for (int i = 0; i < 100; i++) {
-        setDutyCycle(i);
-        __delay_ms(5);
+void initTimer1(void){
+    T1CONbits.RD16 = 1;
+    // T1CONbits.T1RUN = 0;
+    
+    // T1CONbits.T1CKPS = 0b;
+}
+
+void setInterrupts(void){
+    RCONbits.IPEN = 1; // Activar interruptores de alta/baja prioridad
+    INTCONbits.GIEH = 1; // Activar interruptores globales
+    INTCONbits.GIEL = 1; // Activar interruptores de periféricos
+    
+    PIE1bits.TMR2IE = 1; // Activar interruptor de Timer 2
+    IPR1bits.TMR2IP = 1; // Hacer al interruptor de alta prioridad
+    
+    PIE1bits.RCIE = 1; // Activar el interruptor de recepción usart
+    IPR1bits.RCIP = 0; // Hacer el interruptor de prioridad baja
+    
+    //PIE1bits.TXIE = 1; // Activar el interruptor de transmisión usart
+    //IPR1bits.TXIP = 0; // Hacer el interruptor de prioridad baja
+}
+
+void updateCCP1CON_CCPR1L(void){
+    static int table_index_ccp1 = 0;
+    
+    CCPR1L = ccprxl_values_on_init[table_index_ccp1];
+            
+    CCP1CON &= ~(0b11 << 4); // Limpiamos los bits 5:4 de CCP1CON
+    CCP1CON |= (ccpxcon_values_on_init[table_index_ccp1] & 0b11) << 4; // Asignamos los 2 dos bits menos significativos de dutyCycleBits a los bits 5:4 de CCP1CON
+        
+    table_index_ccp1 = (table_index_ccp1 + 1) % table_size;
+}
+    
+void __interrupt(high_priority) highPriorityISR(){
+    if (PIR1bits.TMR2IF) {
+        updateCCP1CON_CCPR1L();
+        
+        PIR1bits.TMR2IF = 0;
     }
 }
 
-/*
-void main(void){
-   initPWMMode();
-   
-   const float F_PWM = 20e3; // Frecuencia de conmutación requerida
-   
-   setPWMFreq(F_PWM);
-   
-   while(true){
-      process();
-   }
-   
-   return;
+void __interrupt(low_priority) lowPriorityISR(){
+    if(PIR1bits.RCIF){
+        uint8_t recv_byte = RCREG;
+        
+        if (RCSTAbits.OERR) {
+            CREN = 0;
+            NOP();
+            CREN = 1;
+        }
+        
+        if (usart_ring_buffer_put(recv_byte) == BUFFER_FULL_ERROR) {
+            NOP();
+        }
+        
+        PIR1bits.RCIF = 0;
+    }
 }
- */
 
-void startUpDuty(uint8_t start_duty, uint8_t end_duty) {
-    for (int i = start_duty; i < end_duty; i++) {
-        __delay_ms(10);
-        setDutyCycle(i);
+void serial_communication(communication_state_t *comm_state){
+    switch(&comm_state){
+        case CONNECT:
+            break;
     }
 }
 
 int main(void) {
-    // (48e6 / 9600 / 64) - 1 = 77.125
-    //initPWMMode();
-    
     initSPWM();
-    const float F_PWM = 40e3; // Frecuencia de conmutación requerida
-    setPWMFreq(F_PWM);
-    startUpDuty(0, 50);
     
+    const float F_PWM = 40e3; // Frecuencia de conmutación requerida
     usart_init();
 
     bool connected = false;
-    bool debug = false;
+    bool debug = false; 
+    
+    setInterrupts();
+    
+    communication_state_t comm_state = CONNECT;
+    
+    /* event loop */
+    while(true){
+    }
 
-    while(true);
     /*
     while (true) {
         if (!connected) {
