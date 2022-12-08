@@ -14,6 +14,33 @@
 
 #define _XTAL_FREQ 20e6
 
+#define MESSAGE_QUEUE_LEN 8
+
+msg_type_t message_queue[8] = {0};
+msg_type_t message_queue_size = 0;
+
+message_queue_result_t message_queue_push(msg_type_t message){
+    if (message_queue_size == MESSAGE_QUEUE_LEN) {
+        return MESSAGE_QUEUE_FULL;
+    }
+    
+    message_queue[message_queue_size] = message;
+    message_queue_size++;
+    
+    return MESSAGE_QUEUE_SUCCESS;
+}
+
+message_queue_result_t message_queue_pop(msg_type_t *message){
+    if (!message_queue_size) {
+        return MESSAGE_QUEUE_EMPTY;
+    }
+    
+    *message = message_queue[message_queue_size - 1];
+    message_queue_size--;
+    
+    return MESSAGE_QUEUE_SUCCESS;
+}
+
 void usart_init() {
     TRISCbits.TRISC6 = 0; // Configuración del pin RC6 como salida
     TRISCbits.TRISC7 = 1; // Configuración del pin RC7 como entrada
@@ -40,7 +67,6 @@ void usart_init() {
     // USART_CONFIG_TX |= 0 << 1 OERR: Bit de error de sobreescritura SÓLO LECTURA
     // USART_CONFIG_TX |= 0 << 0 TX9D (8th bit data) NO SE USA
 
-
     volatile uint8_t BAUDRATE_CONFIG = 0;
 
     BAUDRATE_CONFIG |= 0 << 5; // RXDTP: Desactivamos la inversión de la polaridad para RX
@@ -53,7 +79,7 @@ void usart_init() {
     
     BAUDCON = BAUDRATE_CONFIG;
 
-    SPBRG = 77;
+    SPBRG = 51;
 }
 
 result_t usart_receive_byte(uint8_t *recv_byte) {
@@ -214,45 +240,6 @@ void setCCP1CON_5_4(uint8_t ccpxcon) {
 
 uint8_t getCCP1CON_5_4() {
     return (CCP1CON >> 4) & 0b11;
-}
-
-void softSetPWMRegisters(uint8_t pr2_to_set, uint8_t ccpr1l_to_set, uint8_t ccp1con_5_4_to_set) {
-    uint8_t current_pr2 = PR2;
-
-    while (current_pr2 - pr2_to_set) {
-        if (current_pr2 < pr2_to_set) {
-            PR2++;
-        } else {
-            PR2--;
-        }
-
-        current_pr2 = PR2;
-    }
-
-    uint8_t current_ccpr1l = CCPR1L;
-
-    while (current_ccpr1l - ccpr1l_to_set) {
-        if (current_ccpr1l < ccpr1l_to_set) {
-            CCPR1L++;
-        } else {
-            CCPR1L--;
-        }
-
-        current_ccpr1l = CCPR1L;
-    }
-
-    /*
-    for(uint8_t current_ccpr1l = CCPR1L; current_ccpr1l < ccpr1l_to_set; current_ccpr1l++){
-       CCPR1L = current_ccpr1l;
-       __delay_ms(5);
-    //}
-     */
-
-    setCCP1CON_5_4(ccp1con_5_4_to_set);
-    //for(uint8_t current_ccp1con = getCCP1CON_5_4(); current_ccp1con < ccp1con_5_4_to_set; current_ccp1con++){
-    //   setCCP1CON_5_4(current_ccp1con);
-    // __delay_ms(5);
-    //}
 }
 
 bool synchronize() {
