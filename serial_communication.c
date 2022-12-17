@@ -5,7 +5,10 @@
  * Created on November 10, 2022, 3:12 PM
  */
 
+#include <string.h>
+
 #include "serial_communication.h"
+#include "usart.h"
 
 #define DATA_BUF_LEN 10
 #define MAX_RETRIES 10
@@ -191,7 +194,7 @@ result_t recv_message(uint8_t *received_msg_len, msg_type_t *received_msg_type) 
         return TIMEOUT;
     }
 
-    result = usart_receive_byte(received_msg_type);
+    result = usart_receive_byte(&received_msg_type);
 
     if (result == TIMEOUT) {
         return TIMEOUT;
@@ -233,16 +236,99 @@ bool connect() {
     return true;
 }
 
+
 void setCCP1CON_5_4(uint8_t ccpxcon) {
     CCP1CON &= ~(0b11 << 4); // Limpiamos los bits 5:4 de CCP1CON
     CCP1CON |= (ccpxcon & 0b11) << 4; // Asignamos los 2 dos bits menos significativos de dutyCycleBits a los bits 5:4 de CCP1CON 
 }
 
-uint8_t getCCP1CON_5_4() {
+uint8_t getCCP1CON_5_4(void) {
     return (CCP1CON >> 4) & 0b11;
 }
 
-bool synchronize() {
+
+result_t usart_recv(uint8_t n_bytes, uint8_t *usart_result_buffer, uint8_t usart_buffer_length) {
+    if(usart_ring_buffer_get_size() < n_bytes){
+        return NOT_READY;
+    }
+    
+    for (int i = 0; i < n_bytes; i++) {
+        //usart_result_buffer[i] = usart_ring_buffer_peek();
+        usart_ring_buffer_pop(usart_result_buffer[i]);
+    }
+
+    return SUCCESS;
+}
+
+result_t recv_connect_message(void){
+    const uint8_t message_length = 2;
+    uint8_t result_buffer[2] = {0};
+    
+    result_t result = usart_recv(message_length, result_buffer, message_length);
+    // TODO: Errores
+    
+    if(result_buffer[1] != CONN){
+        return WRONG_MESSAGE_ERROR;
+    }
+    
+    return SUCCESS;
+}
+/*/
+result_t recv_syn_message(float *modulation_index){
+    const uint8_t message_length = 6
+    const msg_type_y message_type = SYNCRHO;
+    
+    usart_recv
+}*/
+
+result_t send_syn_message(float modulation_index){
+    const uint8_t message_length = 6;
+    const msg_type_t message_type = SYNCHRO;
+    
+    uint8_t transmit_buffer[6] = {0};
+    
+    transmit_buffer[0] = message_length;
+    transmit_buffer[1] = message_type;
+    
+    uint32_t modulation_index_bits;
+    
+    memcpy(&modulation_index_bits, &modulation_index, 4);
+            
+    transmit_buffer[2] = (modulation_index_bits & 0xff) >> 0;
+    transmit_buffer[3] = (modulation_index_bits & 0xff00) >> 8;
+    transmit_buffer[4] = (modulation_index_bits & 0xff0000) >> 16;
+    transmit_buffer[5] = (modulation_index_bits & 0xff000000) >> 24;
+
+    usart_transmit_n_bytes(message_length, transmit_buffer);
+    
+    return SUCCESS;
+}
+
+result_t recv_syn_message(float *modulation_index){
+}
+
+result_t send_ack_message(void){
+    const uint8_t message_length = 1;
+    usart_transmit_byte(message_length);
+    
+    const msg_type_t message_type = ACK;
+    usart_transmit_byte(message_type);
+}
+
+result_t recv_ack_message(void){
+    const uint8_t message_length = 2;
+    uint8_t result_buffer[2] = {0};
+    
+    result_t result = usart_recv(message_length, result_buffer, message_length);
+    
+    if(result_buffer[1] != ACK){
+        return WRONG_MESSAGE_ERROR;
+    }
+    
+    return SUCCESS;
+}
+
+bool synchronize(void) {
     uint8_t recv_len = 0;
     msg_type_t recv_msg_type = 0;
 

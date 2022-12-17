@@ -21,8 +21,7 @@ static uint8_t usart_ring_buffer_size = 0;
 
 bool is_usart_ring_buffer_full(){
     // Si el próximo índice final llega hasta el índice de inicio, el buffer está lleno
-    
-	// return ( (usart_ring_buffer_end_index + 1) % USART_BUF_LEN ) == usart_ring_buffer_start_index;
+
     return usart_ring_buffer_size == USART_BUF_LEN;
 }
 
@@ -73,9 +72,11 @@ usart_result_t usart_ring_buffer_peek(uint8_t* byte){
     }
     
     *byte = usart_ring_buffer[usart_ring_buffer_start_index];
+    
+    return USART_SUCCESS;
 }
 
-uint8_t get_usart_ring_buffer_size(){
+uint8_t usart_ring_buffer_get_size(){
     return usart_ring_buffer_size;
 }
 

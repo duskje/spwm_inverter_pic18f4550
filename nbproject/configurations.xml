@@ -6,6 +6,9 @@
                    projectFiles="true">
       <itemPath>serial_communication.h</itemPath>
       <itemPath>bitconfig.h</itemPath>
+      <itemPath>spwm_tables.h</itemPath>
+      <itemPath>usart.h</itemPath>
+      <itemPath>SPWM.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"
@@ -20,6 +23,8 @@
                    projectFiles="true">
       <itemPath>main.c</itemPath>
       <itemPath>serial_communication.c</itemPath>
+      <itemPath>usart.c</itemPath>
+      <itemPath>SPWM.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
@@ -29,6 +34,7 @@
   </logicalFolder>
   <sourceRootList>
     <Elem></Elem>
+    <Elem>D:/</Elem>
   </sourceRootList>
   <projectmakefile>Makefile</projectmakefile>
   <confs>
@@ -38,7 +44,7 @@
         <targetDevice>PIC18F4550</targetDevice>
         <targetHeader></targetHeader>
         <targetPluginBoard></targetPluginBoard>
-        <platformTool>noID</platformTool>
+        <platformTool>Simulator</platformTool>
         <languageToolchain>XC8</languageToolchain>
         <languageToolchainVersion>2.40</languageToolchainVersion>
         <platform>3</platform>
@@ -153,6 +159,12 @@
         <property key="program-the-device-with-default-config-words" value="true"/>
         <property key="remove-unused-sections" value="true"/>
       </HI-TECH-LINK>
+      <Simulator>
+        <property key="periphADC1.minTacq" value="5"/>
+      </Simulator>
+      <Tool>
+        <property key="periphADC1.minTacq" value="5"/>
+      </Tool>
       <XC8-CO>
         <property key="coverage-enable" value=""/>
         <property key="stack-guidance" value="false"/>

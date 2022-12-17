@@ -71,24 +71,31 @@
 extern "C" {
 #endif /* __cplusplus */
 
+typedef enum communication_action {
+   RECV_CONN = 0,
+   SEND_ACK = 1,
+   SEND_SYN = 2,
+   RECV_ACK = 3,
+   RECV_SYN = 4
+} communication_action_t;
+
 typedef enum communication_state {
-   CONNECT = 0,
-   DISCONNECT = 1,
-   SEND_DATA = 2,
-   RECV_DATA = 3
+    DISCONNECTED = 0,
+    CONNECTED = 1
 } communication_state_t;
 
 typedef enum result {
    ERROR = 0,
    SUCCESS = 1,
    TIMEOUT = 2,
-   NOT_READY = 3
-} result_t;
+   NOT_READY = 3,
+   WRONG_MESSAGE_ERROR = 4
+} result_t; // cambiar nombre
 
 typedef enum message_queue_result {
     MESSAGE_QUEUE_SUCCESS = 0,
     MESSAGE_QUEUE_FULL = 1,
-    MESSAGE_QUEUE_EMPTY =2
+    MESSAGE_QUEUE_EMPTY = 2
 } message_queue_result_t;
 
 
@@ -96,7 +103,7 @@ typedef enum msg_type {
    CONN = 1,
    ACK = 2,
    NACK = 3,
-   SYNCHRO = 4,
+   SYNCHRO = 4, // cambiar a SYN
    ALIVE = 5,
    FETCH = 6,
    READY = 7,
@@ -115,8 +122,11 @@ void recv(msg_type_t *msg_type, uint8_t *data_buf, uint8_t data_buf_len);
 
 void recv_and_dispatch();
 
-bool connect();
-bool synchronize();
+result_t recv_connect_message();
+result_t send_syn_message(float modulation_index);
+result_t send_ack_message();
+result_t recv_ack_message();
+
 
 #ifdef	__cplusplus
 }

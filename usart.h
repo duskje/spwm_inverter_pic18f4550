@@ -23,8 +23,9 @@ bool is_usart_ring_buffer_empty();
 
 usart_result_t usart_ring_buffer_put(uint8_t byte);
 usart_result_t usart_ring_buffer_pop(uint8_t *byte);
+usart_result_t usart_ring_buffer_peek(uint8_t* byte);
 
-uint8_t get_usart_ring_buffer_size();
+uint8_t usart_ring_buffer_get_size();
 
 #endif	/* USART_H */
 
