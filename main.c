@@ -164,70 +164,6 @@ void do_serial_communication(
     communication_state_t *comm_state,
     communication_action_t *comm_action
 ){
-    switch(*comm_action){
-        result_t result;
-        
-        case RECV_CONN:
-            result = recv_connect_message();
-            
-            if(result == SUCCESS){
-                *comm_action = SEND_SYN;
-                *comm_state = DISCONNECTED;            
-            } else if(result == NOT_READY){
-                return;
-            }
-            break;
-        case SEND_SYN:
-            result = send_syn_message(0.9);
-            
-            if(result == SUCCESS){
-                *comm_action = RECV_ACK;
-                *comm_state = DISCONNECTED;
-            } else if(result == NOT_READY){
-                return;
-            } else {
-                *comm_action = RECV_CONN;
-                *comm_state = DISCONNECTED;
-            }
-            break;
-        case RECV_ACK:            
-            result = recv_ack_message();
-            
-            if(result == SUCCESS){
-                *comm_action = RECV_SYN;
-                *comm_state = CONNECTED;
-            } else if(result == NOT_READY){
-                return;
-            } else {
-                *comm_action = RECV_CONN;
-                *comm_state = DISCONNECTED;
-            }
-            
-            break;
-        case RECV_SYN:
-            NOP();
-            break;
-        case SEND_ACK:
-            return;
-            
-            if(recv_ack_message() == SUCCESS){
-                *comm_action = RECV_SYN;
-                *comm_state = CONNECTED;
-            } else {
-                *comm_action = RECV_CONN;
-                *comm_state = DISCONNECTED;
-            }
-            
-            break;
-        default:
-            break;
-    }
-}
-
-void do_serial_communication2(
-    communication_state_t *comm_state,
-    communication_action_t *comm_action
-){
     if(has_communication_timed_out){
         usart_ring_buffer_clear();
 
@@ -358,7 +294,7 @@ int main(void) {
     communication_state_t comm_state = DISCONNECTED;
     
     while(true){
-        do_serial_communication2(&comm_state, &comm_action); 
+        do_serial_communication(&comm_state, &comm_action); 
     }
 
     return 0;

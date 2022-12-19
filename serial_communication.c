@@ -84,32 +84,6 @@ void usart_init() {
     SPBRG = 51;
 }
 
-result_t usart_receive_byte(uint8_t *recv_byte) {
-    unsigned long timeout = 0;
-
-    while (!RCIF) {
-        if (timeout > 1e3) {
-            return TIMEOUT;
-        }
-        
-        __delay_us(1);
-        
-        timeout++;
-    }
-
-    bool OERR = (bool) RCSTA & 0b10;
-
-    if (OERR) {
-        CREN = 0;
-        NOP();
-        CREN = 1;
-    }
-
-    *recv_byte = RCREG;
-
-    return SUCCESS;
-}
-
 result_t usart_receive_n_bytes(uint8_t n_bytes, uint8_t *usart_buffer, uint8_t usart_buf_len) {
     for (int i = 0; i < n_bytes; i++) {
         uint8_t recv_byte;
