@@ -1,24 +1,9 @@
 #include "SPWM.h"
-
-uint8_t table1_ccpxcon[400];
-uint8_t table1_ccprxl[400];
-
-uint8_t table2_ccpxcon[400];
-uint8_t table2_ccprxl[400];
-
-uint8_t *current_ccpxcon_table;
-uint8_t *current_ccprxl_table;
-
-uint8_t *next_ccpxcon_table;
-uint8_t *next_ccprxl_table;
-
-volatile bool change_tables = false;
-volatile bool currently_calculating = false;
-
+/*
 void init_tables(){
 	// Copiar valores iniciales a la tabla 1
 
-	for(int i = 0; i < table_size; i++){
+	for(int i = 0; i < SPWM_TABLE_SIZE; i++){
 		table1_ccpxcon[i] = ccpxcon_values_on_init[i];
 		table1_ccprxl[i] = ccprxl_values_on_init[i];
 	}
@@ -28,7 +13,6 @@ void init_tables(){
 
 	next_ccpxcon_table = table2_ccpxcon;
 	next_ccprxl_table = table2_ccprxl;
-
 }
 
 int real_duty_cycle_to_pic_duty_cycle(float duty_cycle){
@@ -55,7 +39,7 @@ void do_change_tables(){
 }
 
 void calculate_spwm_table(float modulation_index){
-	/* Calcular la tabla de valores SPWM usando muestreo asimétrico */
+	// Calcular la tabla de valores SPWM usando muestreo asimétrico
 
 	static float last_M = INIT_MODULATION_INDEX;
     
@@ -71,11 +55,11 @@ void calculate_spwm_table(float modulation_index){
 
 	const float SWITCHING_PERIOD = 1 / 40e3;
 
-	for(int k = 0; k < table_size ; k++){
+	for(int k = 0; k < SPWM_TABLE_SIZE; k++){
 		float t_on1 = (SWITCHING_PERIOD / 4) * (1 + M * sin_samples[k]);
 		float t_on2;
 		
-		if(k + 1 != table_size){
+		if(k + 1 != SPWM_TABLE_SIZE){
 			t_on2 = (SWITCHING_PERIOD / 4) * (1 + M * sin_samples[k + 1]);
 		} else { 
 			t_on2 = (SWITCHING_PERIOD / 4) * (1 + M * sin_samples[0]);
@@ -91,3 +75,4 @@ void calculate_spwm_table(float modulation_index){
 	currently_calculating = false;
 	change_tables = true;
 }
+*/

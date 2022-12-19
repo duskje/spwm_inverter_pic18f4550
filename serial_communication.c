@@ -8,7 +8,6 @@
 #include <string.h>
 
 #include "serial_communication.h"
-#include "usart.h"
 
 #define DATA_BUF_LEN 10
 #define MAX_RETRIES 10
@@ -254,7 +253,7 @@ result_t usart_recv(uint8_t n_bytes, uint8_t *usart_result_buffer, uint8_t usart
     
     for (int i = 0; i < n_bytes; i++) {
         //usart_result_buffer[i] = usart_ring_buffer_peek();
-        usart_ring_buffer_pop(usart_result_buffer[i]);
+        usart_ring_buffer_pop(&usart_result_buffer[i]);
     }
 
     return SUCCESS;
@@ -266,6 +265,9 @@ result_t recv_connect_message(void){
     
     result_t result = usart_recv(message_length, result_buffer, message_length);
     // TODO: Errores
+    if(result != SUCCESS){
+        return result;
+    }
     
     if(result_buffer[1] != CONN){
         return WRONG_MESSAGE_ERROR;
@@ -281,30 +283,42 @@ result_t recv_syn_message(float *modulation_index){
     usart_recv
 }*/
 
-result_t send_syn_message(float modulation_index){
-    const uint8_t message_length = 6;
+result_t send_syn_message(modulation_index_tables_enum current_modulation_index){
+    const uint8_t buffer_length = 3;
+    const uint8_t message_length = 2;
     const msg_type_t message_type = SYNCHRO;
     
-    uint8_t transmit_buffer[6] = {0};
+    uint8_t transmit_buffer[3] = {0};
     
     transmit_buffer[0] = message_length;
     transmit_buffer[1] = message_type;
-    
-    uint32_t modulation_index_bits;
-    
-    memcpy(&modulation_index_bits, &modulation_index, 4);
-            
-    transmit_buffer[2] = (modulation_index_bits & 0xff) >> 0;
-    transmit_buffer[3] = (modulation_index_bits & 0xff00) >> 8;
-    transmit_buffer[4] = (modulation_index_bits & 0xff0000) >> 16;
-    transmit_buffer[5] = (modulation_index_bits & 0xff000000) >> 24;
+    transmit_buffer[2] = current_modulation_index;
 
-    usart_transmit_n_bytes(message_length, transmit_buffer);
+    usart_transmit_n_bytes(buffer_length, transmit_buffer);
     
     return SUCCESS;
 }
 
-result_t recv_syn_message(float *modulation_index){
+result_t recv_syn_message(modulation_index_tables_enum *current_modulation_index){
+   const uint8_t buffer_length = 3;
+   const uint8_t message_length = 3;
+   const msg_type_t message_type = SYNCHRO;
+   
+   uint8_t recv_buffer[3] = {0};
+   
+   result_t result = usart_recv(message_length, recv_buffer, message_length);
+   
+   if(result != SUCCESS){
+      return result;
+    }
+    
+    if(recv_buffer[1] != SYNCHRO){
+        return WRONG_MESSAGE_ERROR;
+    }
+    
+    *current_modulation_index = recv_buffer[2];
+    
+    return SUCCESS;
 }
 
 result_t send_ack_message(void){
@@ -313,6 +327,8 @@ result_t send_ack_message(void){
     
     const msg_type_t message_type = ACK;
     usart_transmit_byte(message_type);
+    
+    return SUCCESS;
 }
 
 result_t recv_ack_message(void){
@@ -320,6 +336,12 @@ result_t recv_ack_message(void){
     uint8_t result_buffer[2] = {0};
     
     result_t result = usart_recv(message_length, result_buffer, message_length);
+    
+    if(result != SUCCESS){
+        return result;
+    }
+    
+    INTCONbits.TMR0IF;
     
     if(result_buffer[1] != ACK){
         return WRONG_MESSAGE_ERROR;

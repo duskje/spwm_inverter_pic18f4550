@@ -37,6 +37,9 @@
 #include <stdint.h>
 #include <stdbool.h>
 
+#include "usart.h"
+#include "spwm_tables.h"
+
 // TODO Insert appropriate #include <>
 
 // TODO Insert C++ class definitions if appropriate
@@ -123,8 +126,9 @@ void recv(msg_type_t *msg_type, uint8_t *data_buf, uint8_t data_buf_len);
 void recv_and_dispatch();
 
 result_t recv_connect_message();
-result_t send_syn_message(float modulation_index);
+result_t send_syn_message(modulation_index_tables_enum current_modulation_index);
 result_t send_ack_message();
+result_t recv_syn_message(modulation_index_tables_enum *current_modulation_index);
 result_t recv_ack_message();
 
 

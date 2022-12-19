@@ -31,6 +31,12 @@ bool is_usart_ring_buffer_empty(){
 	return usart_ring_buffer_end_index == usart_ring_buffer_start_index;
 }
 
+void usart_ring_buffer_clear(){
+   usart_ring_buffer_end_index = 0;
+   usart_ring_buffer_start_index = 0;
+   usart_ring_buffer_size = 0;
+}
+
 usart_result_t usart_ring_buffer_put(uint8_t byte){
 	if(is_usart_ring_buffer_full()){
 		return BUFFER_FULL_ERROR; // El buffer está lleno
