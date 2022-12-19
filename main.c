@@ -22,27 +22,11 @@
 #define _XTAL_FREQ 20e6
 
 volatile modulation_index_tables_enum current_modulation_index = MODULATION_INDEX_95;
+
 volatile bool has_communication_timed_out = false;
 
-void setPWMFreq(float PWMFreq) {
-    const uint8_t TMR2Prescaler = 1;
-    const uint32_t F_OSC = 32e6;
-    
-    PR2 = ceil(((float) F_OSC / (PWMFreq * 4 * (TMR2Prescaler))) - 1);
-}
 
-void setDutyCycle(uint8_t dutyCycle) {
-    if (dutyCycle > 100)
-        dutyCycle = 100;
-
-    uint16_t dutyCycleBits = trunc((PR2 + 1) * ((float) dutyCycle / 100) * 4);
-    CCPR1L = dutyCycleBits >> 2; // Quitamos los dos bits menos significativos y agregamos padding en los dos más significativos
-
-    CCP1CON &= ~(0b11 << 4); // Limpiamos los bits 5:4 de CCP1CON
-    CCP1CON |= (dutyCycleBits & 0b11) << 4; // Asignamos los 2 dos bits menos significativos de dutyCycleBits a los bits 5:4 de CCP1CON 
-}
-
-void initSPWM(void){
+void SPWM_init(void){
     TRISCbits.TRISC2 = 0; // Pin C2 como salida
     TRISDbits.TRISD5 = 0; // Pin D5 como salida
     
@@ -62,7 +46,7 @@ void initSPWM(void){
     T2CONbits.TMR2ON = 1;
 }
 
-void init_timer0(void){
+void timer0_init(void){
     T0CONbits.TMR0ON = 0; // Empezar apagado
     T0CONbits.T08BIT = 0; // Configurar timer a 16 bits
     T0CONbits.PSA = 0; // Usar prescaler
@@ -74,39 +58,38 @@ void init_timer0(void){
     T0CONbits.T0PS2 = 1;
 }
 
-void timer0start(){
-    init_timer0();
+void timer0_start(){
+    timer0_init();
     
     TMR0H = 0;
     TMR0L = 0;
     T0CONbits.TMR0ON = 1;
 }
 
-void timer0stop(){
+void timer0_stop(){
     T0CONbits.TMR0ON = 0;
     TMR0H = 0;
     TMR0L = 0;
 }
 
-void timer0restart(){
+void timer0_restart(){
    TMR0H = 0;
    TMR0L = 0;
    
-   init_timer0();
+   timer0_init();
    T0CONbits.TMR0ON = 1;
 }
 
-void setInterrupts(void){
+void set_interrupts(void){
     RCONbits.IPEN = 1; // Activar interruptores de alta/baja prioridad
     INTCONbits.GIEH = 1; // Activar interruptores globales
     INTCONbits.GIEL = 1; // Activar interruptores de periféricos
     
-    PIE1bits.TMR2IE = 1; // Activar interruptor de Timer 2
+    PIE1bits.TMR2IE = 1; // Activar interruptor de TMR2
     IPR1bits.TMR2IP = 1; // Hacer al interruptor de alta prioridad
     
-    // interrupciones tmr0
-    INTCONbits.TMR0IE = 1;
-    INTCON2bits.TMR0IP = 0;
+    INTCONbits.TMR0IE = 1; // Activar interrupciones TMR0
+    INTCON2bits.TMR0IP = 0; // Hacer al interrptor de prioridad baja
     
     PIE1bits.RCIE = 1; // Activar el interruptor de recepción usart
     IPR1bits.RCIP = 0; // Hacer el interruptor de prioridad baja
@@ -115,7 +98,7 @@ void setInterrupts(void){
     //IPR1bits.TXIP = 0; // Hacer el interruptor de prioridad baja
 }
 
-void updateCCP1CON_CCPR1L(void){
+void update_CCP1CON_CCPR1L(void){
     static int table_index_ccp1 = 0;
     
     // CCPR1L = ccprxl_values_on_init[table_index_ccp1];
@@ -130,15 +113,15 @@ void updateCCP1CON_CCPR1L(void){
     table_index_ccp1 = (table_index_ccp1 + 1) % (SPWM_TABLE_SIZE - 2);
 }
 
-void __interrupt(high_priority) highPriorityISR(){
+void __interrupt(high_priority) high_priorityISR(){
     if (PIR1bits.TMR2IF) {
-        updateCCP1CON_CCPR1L();
+        update_CCP1CON_CCPR1L();
         
         PIR1bits.TMR2IF = 0;
     }
 }
 
-void __interrupt(low_priority) lowPriorityISR(){
+void __interrupt(low_priority) low_priority_ISR(){
     if(PIR1bits.RCIF){
         uint8_t recv_byte = RCREG;
         
@@ -160,16 +143,23 @@ void __interrupt(low_priority) lowPriorityISR(){
     }
 }
 
+void reset_communication(
+    communication_state_t *comm_state,
+    communication_action_t *comm_action
+){
+    usart_ring_buffer_clear();
+
+    *comm_action = RECV_CONN;
+    *comm_state = DISCONNECTED;
+}
+
 void do_serial_communication(
     communication_state_t *comm_state,
     communication_action_t *comm_action
 ){
     if(has_communication_timed_out){
-        usart_ring_buffer_clear();
-
-	    *comm_action = RECV_CONN;
-        *comm_state = DISCONNECTED;
-	    
+        reset_communication(comm_state, comm_action);
+        
 	    has_communication_timed_out = false;
     }
     
@@ -185,16 +175,13 @@ void do_serial_communication(
                     result = recv_syn_message(&current_modulation_index);
 		    
                     if(result == SUCCESS){
-                        timer0restart();
+                        timer0_restart();
 			
                         *comm_action = SEND_ACK;           
                     } else if(result == NOT_READY){
                         return;
                     } else {
-                        usart_ring_buffer_clear();
-
-                        *comm_action = RECV_CONN;
-                        *comm_state = DISCONNECTED;  
+                        reset_communication(comm_state, comm_action);
                     }
                     
                     break;
@@ -202,16 +189,13 @@ void do_serial_communication(
                     result = send_ack_message();
 		    
                     if(result == SUCCESS){
-                        timer0restart();
+                        timer0_restart();
 			
                         *comm_action = RECV_SYN;           
                     } else if(result == NOT_READY){
                         return;
                     } else {
-                        usart_ring_buffer_clear();
-
-                        *comm_action = RECV_CONN;
-                        *comm_state = DISCONNECTED;  
+                        reset_communication(comm_state, comm_action);
                     }
 		    
                     break;
@@ -225,14 +209,14 @@ void do_serial_communication(
             
             switch(*comm_action){
                 case RECV_CONN:
-                    timer0stop();
+                    timer0_stop();
+                    
                     result = recv_connect_message();
             
                     if(result == SUCCESS){
-                        timer0start();
+                        timer0_start();
                         
-                        *comm_action = SEND_SYN;
-                        *comm_state = DISCONNECTED;            
+                        *comm_action = SEND_SYN;         
                     } else if(result == NOT_READY){
                         return;
                     }
@@ -242,17 +226,13 @@ void do_serial_communication(
                     result = send_syn_message(current_modulation_index);
             
                     if(result == SUCCESS){
-                        timer0restart();
+                        timer0_restart();
                         
-                        *comm_action = RECV_ACK;
-                        *comm_state = DISCONNECTED;            
+                        *comm_action = RECV_ACK;          
                     } else if(result == NOT_READY){
                         return;
                     } else { 
-                        usart_ring_buffer_clear();
-
-                        *comm_action = RECV_CONN;
-                        *comm_state = DISCONNECTED;     
+                        reset_communication(comm_state, comm_action);
                     }
                     
                     break;
@@ -260,17 +240,14 @@ void do_serial_communication(
                     result = recv_ack_message();
                     
                     if(result == SUCCESS){
-                        timer0restart();
+                        timer0_restart();
                         
                         *comm_action = RECV_SYN;
                         *comm_state = CONNECTED;            
                     } else if(result == NOT_READY){
                         return;
                     } else {
-                        usart_ring_buffer_clear();
-
-                        *comm_action = RECV_CONN;
-                        *comm_state = DISCONNECTED;     
+                        reset_communication(comm_state, comm_action);  
                     }
                     
                     break;
@@ -284,11 +261,11 @@ void do_serial_communication(
 }
 
 int main(void) {
-    initSPWM();
+    SPWM_init();
     
     usart_init();
    
-    setInterrupts();
+    set_interrupts();
     
     communication_action_t comm_action = RECV_CONN;
     communication_state_t comm_state = DISCONNECTED;

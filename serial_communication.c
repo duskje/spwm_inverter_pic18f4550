@@ -314,9 +314,7 @@ result_t recv_ack_message(void){
     if(result != SUCCESS){
         return result;
     }
-    
-    INTCONbits.TMR0IF;
-    
+
     if(result_buffer[1] != ACK){
         return WRONG_MESSAGE_ERROR;
     }
