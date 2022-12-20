@@ -103,11 +103,11 @@ void update_CCP1CON_CCPR1L(void){
     
     // CCPR1L = ccprxl_values_on_init[table_index_ccp1];
     //uint8_t *table = ccprxl_tables[MODULATION_INDEX_95];
-    CCPR1L = ccprxl_tables[MODULATION_INDEX_95][table_index_ccp1];
+    CCPR1L = ccprxl_tables[current_modulation_index][table_index_ccp1];
 
     CCP1CON &= ~(0b11 << 4); // Limpiamos los bits 5:4 de CCP1CON
     //    CCP1CON |= (ccpxcon_tables[MODULATION_INDEX_95][table_index_ccp1] & 0b11) << 4; // Asignamos los 2 dos bits menos significativos de dutyCycleBits a los bits 5:4 de CCP1CON
-    CCP1CON |= (ccpxcon_tables[MODULATION_INDEX_95][table_index_ccp1] & 0b11) << 4; // Asignamos los 2 dos bits menos significativos de dutyCycleBits a los bits 5:4 de CCP1CON
+    CCP1CON |= (ccpxcon_tables[current_modulation_index][table_index_ccp1] & 0b11) << 4; // Asignamos los 2 dos bits menos significativos de dutyCycleBits a los bits 5:4 de CCP1CON
     //CCP1CON |= (ccpxcon_values_on_init[table_index_ccp1] & 0b11) << 4; // Asignamos los 2 dos bits menos significativos de dutyCycleBits a los bits 5:4 de CCP1CON
 
     table_index_ccp1 = (table_index_ccp1 + 1) % (SPWM_TABLE_SIZE - 2);
