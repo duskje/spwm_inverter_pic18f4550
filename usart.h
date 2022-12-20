@@ -16,11 +16,13 @@ typedef enum usart_result_t {
     USART_SUCCESS,
     BUFFER_FULL_ERROR,
     BUFFER_EMPTY_ERROR,
+    OUT_OF_BOUNDS_ERROR
 } usart_result_t;
 
 bool is_usart_ring_buffer_full();
 bool is_usart_ring_buffer_empty();
 
+usart_result_t usart_ring_buffer_get_element(uint8_t *byte, uint8_t i);
 usart_result_t usart_ring_buffer_put(uint8_t byte);
 usart_result_t usart_ring_buffer_pop(uint8_t *byte);
 usart_result_t usart_ring_buffer_peek(uint8_t* byte);

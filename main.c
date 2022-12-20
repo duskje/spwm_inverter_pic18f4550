@@ -164,7 +164,7 @@ void do_serial_communication(
     }
     
     switch(*comm_state){
-        result_t result;
+        communication_result_t result;
         
         case CONNECTED:
             TRISDbits.RD1 = 0;

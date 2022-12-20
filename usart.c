@@ -31,6 +31,16 @@ bool is_usart_ring_buffer_empty(){
 	return usart_ring_buffer_end_index == usart_ring_buffer_start_index;
 }
 
+usart_result_t usart_ring_buffer_get_element(uint8_t *byte, uint8_t i){
+    if(i >= usart_ring_buffer_size){
+        return OUT_OF_BOUNDS_ERROR;
+    }
+    
+    *byte = usart_ring_buffer[(usart_ring_buffer_start_index + i) % USART_BUF_LEN];
+    
+    return USART_SUCCESS;
+}
+
 void usart_ring_buffer_clear(){
    usart_ring_buffer_end_index = 0;
    usart_ring_buffer_start_index = 0;
